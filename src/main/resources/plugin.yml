@@ -1,0 +1,9 @@
+name: woodcutter
+version: '1.0'
+main: net.nisylvania.woodcutter.Woodcutter
+api-version: '1.21'
+authors: [ nisylvania ]
+commands:
+  wood:
+    description: 木こりプラグイン用のコマンドです
+    usage: /wood
