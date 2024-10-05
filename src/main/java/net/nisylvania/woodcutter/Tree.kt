@@ -5,6 +5,7 @@ import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.block.Block
+import org.bukkit.block.data.type.Leaves
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -41,33 +42,9 @@ class Tree(b: Block) {
     /** 選択したものが木であるかを判別し、返す
      *
      * @param b 最初に壊したブロック
-     * @return 木：Ture 木でない:False
+     * @return 木：True 木でない:False
      */
     private fun isTree(b: Block): Boolean {
-        val under = b.location.clone()
-        under.y = under.y - 1
-        val ub = under.block.type
-
-        //原木の下が土系のブロックか
-        if (!(ub == Material.DIRT
-                    || ub == Material.PODZOL
-                    || ub == Material.COARSE_DIRT
-                    || ub == Material.GRASS_BLOCK
-                    || ub == Material.MYCELIUM
-                    || ub == Material.CRIMSON_NYLIUM
-                    || ub == Material.WARPED_NYLIUM
-                    || ub == Material.NETHERRACK
-                    || ub == Material.MOSS_BLOCK
-                    || ub == Material.MUD
-                    || ub == Material.MANGROVE_ROOTS
-                    || ub == Material.MUDDY_MANGROVE_ROOTS
-                    )
-        ) {
-            return false
-        } else if (!(WoodUtil.isWood(b.type) || WoodUtil.isMangroveLog(b.type))) {
-            return false
-        }
-
         //原木と、隣接している葉をフィールドに入れていく
         val logIndex = WoodUtil.getIndex(b.type)
         if (logIndex == 0) {
@@ -141,7 +118,7 @@ class Tree(b: Block) {
         if (b.type == logType) {
             if (!treeLog.contains(b)) treeLog.add(b)
             if (firstLayer) firstLayerLoc.add(l.clone())
-        } else if (b.type == leaveType) {
+        } else if (b.type == leaveType && !(b.blockData as Leaves).isPersistent) {
             if (!treeLeaves.contains(b)) treeLeaves.add(b)
             return true
         } else {
@@ -162,7 +139,7 @@ class Tree(b: Block) {
                     if (b.type == logType && !treeLog.contains(b)) {
                         treeLog.add(b)
                         searchAround(l, firstLayer, radius)
-                    } else if (b.type == leaveType && !treeLeaves.contains(b)) {
+                    } else if (b.type == leaveType && !treeLeaves.contains(b) && !(b.blockData as Leaves).isPersistent) {
                         treeLeaves.add(b)
                     }
                     if (tooBig()) return false
@@ -213,7 +190,7 @@ class Tree(b: Block) {
                     if (WoodUtil.isMangroveWood(b.type) && !treeLog.contains(b)) {
                         treeLog.add(b)
                         searchAroundMangrove(l, false, diameter)
-                    } else if (b.type == leaveType && !treeLeaves.contains(b)) {
+                    } else if (b.type == leaveType && !treeLeaves.contains(b) && !(b.blockData as Leaves).isPersistent) {
                         treeLeaves.add(b)
                     }
                     if (tooBig()) return false
