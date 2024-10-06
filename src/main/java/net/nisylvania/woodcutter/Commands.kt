@@ -10,15 +10,14 @@ class Commands : CommandExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
         if (label.equals("wood", ignoreCase = true)) {
             if (sender !is Player) return false
-            val p = sender
-            if (PlayerListeners.disable.contains(p)) {
-                PlayerListeners.disable.remove(p)
+            if (PlayerListeners.disable.contains(sender)) {
+                PlayerListeners.disable.remove(sender)
                 sender.sendMessage(
                     (ChatColor.WHITE.toString() + "木こりプラグインを"
                             + ChatColor.BLUE + "有効化" + ChatColor.WHITE + "しました。")
                 )
             } else {
-                PlayerListeners.disable.add(p)
+                PlayerListeners.disable.add(sender)
                 sender.sendMessage(
                     (ChatColor.WHITE.toString() + "木こりプラグインを"
                             + ChatColor.RED + "無効化" + ChatColor.WHITE + "しました。")

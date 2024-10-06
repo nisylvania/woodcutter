@@ -36,20 +36,6 @@ class Mush(b: Block) {
      * @return 木：Ture 木でない:False
      */
     private fun isMush(b: Block): Boolean {
-        val under = b.location.clone()
-        under.y = under.y - 1
-        val ub = under.block.type
-
-        //原木の下が土系のブロックか
-        if (!(ub == Material.DIRT
-                    || ub == Material.PODZOL
-                    || ub == Material.COARSE_DIRT
-                    || ub == Material.GRASS_BLOCK
-                    )
-        ) {
-            return false
-        }
-
         //原木と、隣接している葉をフィールドに入れていく
         mushLogic(b)
 

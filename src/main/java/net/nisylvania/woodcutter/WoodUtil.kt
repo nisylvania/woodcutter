@@ -1,7 +1,6 @@
 package net.nisylvania.woodcutter
 
 import org.bukkit.Material
-import java.util.*
 
 object WoodUtil {
     /** 木の種類
@@ -17,7 +16,7 @@ object WoodUtil {
      * マングローブの根 -> 9
      * 桜 -> 10
      */
-    private val logs: List<Material> = Arrays.asList(
+    private val logs: List<Material> = listOf(
         Material.OAK_LOG,  //0
         Material.SPRUCE_LOG,
         Material.BIRCH_LOG,
@@ -31,7 +30,7 @@ object WoodUtil {
         Material.CHERRY_LOG
     )
 
-    private val leaves: List<Material> = Arrays.asList(
+    private val leaves: List<Material> = listOf(
         Material.OAK_LEAVES,  //0
         Material.SPRUCE_LEAVES,
         Material.BIRCH_LEAVES,
@@ -45,7 +44,7 @@ object WoodUtil {
         Material.CHERRY_LEAVES
     )
 
-    private val saplings: List<Material> = Arrays.asList(
+    private val saplings: List<Material> = listOf(
         Material.OAK_SAPLING,  //0
         Material.SPRUCE_SAPLING,
         Material.BIRCH_SAPLING,
@@ -68,16 +67,20 @@ object WoodUtil {
         return logs.contains(type)
     }
 
+    fun isNetherWood(type: Material): Boolean {
+        return type == Material.CRIMSON_STEM || type == Material.WARPED_STEM
+    }
+
     fun isMangroveWood(type: Material): Boolean {
         return type == Material.MANGROVE_LOG || type == Material.MANGROVE_ROOTS
     }
 
     /** Materialが葉かどうかを返す
      *
-     * @param type Naterial
+     * @param type Material
      * @return 葉:true 葉でない:false
      */
-    fun isLeavses(type: Material): Boolean {
+    fun isLeaves(type: Material): Boolean {
         return leaves.contains(type)
     }
 
@@ -88,10 +91,8 @@ object WoodUtil {
      * @return woodcutterでの木の種類
      */
     fun getIndex(wood: Material): Int {
-        var i = 0
-        for (m in logs) {
+        for ((i, m) in logs.withIndex()) {
             if (wood == m) return i
-            i++
         }
         return -1
     }
@@ -124,13 +125,33 @@ object WoodUtil {
     }
 
     /**
+     * ネザー関連の原木かどうかを返す
+     *
+     * @param index 調べるindex
+     * @return ネザー関連ならtrue
+     */
+    fun isNetherLog(index: Int): Boolean {
+        return index in 6..7
+    }
+
+    /**
+     * ネザー関連の原木かどうかを返す
+     *
+     * @param material 調べるindex
+     * @return ネザー関連ならtrue
+     */
+    fun isNetherLog(material: Material): Boolean {
+        return isNetherLog(getIndex(material))
+    }
+
+    /**
      * マングローブ関連の原木かどうかを返す
      *
      * @param index 調べるindex
      * @return マングローブならtrue
      */
     fun isMangroveLog(index: Int): Boolean {
-        return 8 <= index && index <= 9
+        return index in 8..9
     }
 
     /**

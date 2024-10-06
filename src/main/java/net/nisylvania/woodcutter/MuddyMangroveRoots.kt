@@ -12,7 +12,7 @@ import org.bukkit.inventory.meta.Damageable
 import org.bukkit.scheduler.BukkitRunnable
 
 class MuddyMangroveRoots(b: Block) {
-    private val MAX_TRANSITITION = 3 //四方への最大遷移数, (遷移: transition)
+    private val MAX_TRANSITION = 3 //四方への最大遷移数, (遷移: transition)
     private val MAX_AMOUNTS = 1000
     private val roots = ArrayList<Block>()
 
@@ -21,7 +21,7 @@ class MuddyMangroveRoots(b: Block) {
     }
 
     private fun mmrLogic(b: Block, transition: Int) {
-        if (b.type != Material.MUDDY_MANGROVE_ROOTS || transition > MAX_TRANSITITION || roots.size > MAX_AMOUNTS) return
+        if (b.type != Material.MUDDY_MANGROVE_ROOTS || transition > MAX_TRANSITION || roots.size > MAX_AMOUNTS) return
 
         if (!roots.contains(b)) {
             roots.add(b)

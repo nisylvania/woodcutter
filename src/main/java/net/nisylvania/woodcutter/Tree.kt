@@ -18,7 +18,7 @@ class Tree(b: Block) {
 
     /** 木であるかどうかを返す
      *
-     * @return 木：Ture 木でない:False
+     * @return 木：True 木でない:False
      */
     val isTree: Boolean
     private val logType = b.type
@@ -49,6 +49,8 @@ class Tree(b: Block) {
         val logIndex = WoodUtil.getIndex(b.type)
         if (logIndex == 0) {
             orkLogic(b, 4)
+        } else if (WoodUtil.isNetherLog(logIndex)) {
+            netherLogic(b)
         } else if (WoodUtil.isMangroveLog(logIndex)) {
             mangroveLogic(b)
         } else {
@@ -74,7 +76,26 @@ class Tree(b: Block) {
                 searchAround(l, firstLayer, radius)
             }
             if (firstLayer) firstLayer = false
-            l.y = l.y + 1
+            l.y += 1
+        }
+    }
+
+    /** 周囲のブロックを検査し、原木があればさらにその周りを検査する
+     *
+     * @param firstBlock 最初に壊したブロック  原木でなければならない
+     */
+    private fun netherLogic(firstBlock: Block) {
+        val l = firstBlock.location.clone()
+        var firstLayer = true
+
+        while (l.block.type == logType) {
+            if (tooBig()) {
+                break
+            } else {
+                searchAroundNether(l, firstLayer, 4)
+            }
+            if (firstLayer) firstLayer = false
+            l.y += 1
         }
     }
 
@@ -93,7 +114,7 @@ class Tree(b: Block) {
                 searchAroundMangrove(l, firstLayer, 4)
             }
             if (firstLayer) firstLayer = false
-            l.y = l.y + 1
+            l.y += 1
         }
     }
 
@@ -161,6 +182,56 @@ class Tree(b: Block) {
      * @param firstBlock 地面に隣接している場所かどうか
      * @param diameter 探索する範囲の直径(通常3)
      */
+    private fun searchAroundNether(center: Location, firstBlock: Boolean, diameter: Int): Boolean {
+        if (tooBig()) {
+            return false
+        }
+        val l = center.clone()
+        var b = l.block
+
+        if (WoodUtil.isNetherWood(b.type)) {
+            if (!treeLog.contains(b)) treeLog.add(b)
+            if (firstBlock) firstLayerLoc.add(l.clone())
+        } else if (b.type == leaveType) {
+            if (!treeLeaves.contains(b)) treeLeaves.add(b)
+            return true
+        } else {
+            return true
+        }
+
+        //remake
+        val width = diameter / 2
+        for (yShift in -1..1) {
+            l.y = center.y + yShift
+            for (xShift in -width..width) {
+                for (zShift in -width..width) {
+                    l.x = center.x + xShift
+                    l.z = center.z + zShift
+                    b = l.block
+                    if (WoodUtil.isNetherWood(b.type) && !treeLog.contains(b)) {
+                        treeLog.add(b)
+                        searchAroundNether(l, false, diameter)
+                    } else if (b.type == leaveType && !treeLeaves.contains(b)) {
+                        treeLeaves.add(b)
+                    }
+                    if (tooBig()) return false
+                }
+            }
+        }
+
+        return true
+    }
+
+    /** ある原木の周りを検査し、原木と葉をフィールドに追加する
+     *
+     * ある原木のxy周囲8マス、y座標1増加した9増マス分を検査し
+     * 同種原木なら再帰、葉なら追加してreturnする
+     *
+     *
+     * @param center 検査する原木の座標
+     * @param firstBlock 地面に隣接している場所かどうか
+     * @param diameter 探索する範囲の直径(通常3)
+     */
     private fun searchAroundMangrove(center: Location, firstBlock: Boolean, diameter: Int): Boolean {
         if (tooBig()) {
             return false
@@ -171,14 +242,14 @@ class Tree(b: Block) {
         if (WoodUtil.isMangroveWood(b.type)) {
             if (!treeLog.contains(b)) treeLog.add(b)
             if (firstBlock) firstLayerLoc.add(l.clone())
-        } else if (b.type == leaveType) {
+        } else if (b.type == leaveType && !(b.blockData as Leaves).isPersistent) {
             if (!treeLeaves.contains(b)) treeLeaves.add(b)
             return true
         } else {
             return true
         }
 
-        //reamke
+        //remake
         val width = diameter / 2
         for (yShift in -1..1) {
             l.y = center.y + yShift
