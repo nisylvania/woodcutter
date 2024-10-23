@@ -11,6 +11,8 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.scheduler.BukkitRunnable
+import java.util.*
+import kotlin.collections.ArrayList
 
 class Tree(b: Block) {
     private val MAX_LOG_AMOUNT = 1000
@@ -283,7 +285,25 @@ class Tree(b: Block) {
         object : BukkitRunnable() {
             override fun run() {
                 for (b in treeLog) b.breakNaturally(tool)
-                for (b in treeLeaves) b.breakNaturally()
+                for (b in treeLeaves) {
+                    if (tool.containsEnchantment(Enchantment.SILK_TOUCH)) {
+                        // シルクタッチ：葉ブロックをそのままドロップ
+                        b.world.dropItemNaturally(b.location, ItemStack(b.type))
+                        b.type = Material.AIR // 葉ブロックを破壊
+                    } else {
+                        // 幸運：幸運レベルに応じてアイテムドロップ量を増加
+                        if (tool.getEnchantmentLevel(Enchantment.FORTUNE) > 0) {
+                            val random = Random()
+                            val dropMultiplier = 1 + random.nextInt(tool.getEnchantmentLevel(Enchantment.FORTUNE) + 1)
+                            for (i in 0 until dropMultiplier) {
+                                b.breakNaturally(tool)
+                            }
+                        } else {
+                            // 通常ドロップ
+                            b.breakNaturally()
+                        }
+                    }
+                }
             }
         }.run()
 

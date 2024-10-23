@@ -1,5 +1,5 @@
 name: woodcutter
-version: '1.2'
+version: '1.3'
 main: net.nisylvania.woodcutter.Woodcutter
 api-version: '1.21'
 authors: [ nisylvania ]
