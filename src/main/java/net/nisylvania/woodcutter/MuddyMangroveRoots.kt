@@ -10,10 +10,11 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.scheduler.BukkitRunnable
+import java.util.*
 
 class MuddyMangroveRoots(b: Block) {
-    private val MAX_TRANSITION = 3 //四方への最大遷移数, (遷移: transition)
-    private val MAX_AMOUNTS = 1000
+    private val maxTransition = 3 //四方への最大遷移数, (遷移: transition)
+    private val maxAmounts = 1000
     private val roots = ArrayList<Block>()
 
     init {
@@ -21,7 +22,7 @@ class MuddyMangroveRoots(b: Block) {
     }
 
     private fun mmrLogic(b: Block, transition: Int) {
-        if (b.type != Material.MUDDY_MANGROVE_ROOTS || transition > MAX_TRANSITION || roots.size > MAX_AMOUNTS) return
+        if (b.type != Material.MUDDY_MANGROVE_ROOTS || transition > maxTransition || roots.size > maxAmounts) return
 
         if (!roots.contains(b)) {
             roots.add(b)
@@ -39,7 +40,7 @@ class MuddyMangroveRoots(b: Block) {
     }
 
     fun dig(p: Player): Boolean {
-        if (roots.size > MAX_AMOUNTS) return false
+        if (roots.size > maxAmounts) return false
         val tool = p.inventory.itemInMainHand
         object : BukkitRunnable() {
             override fun run() {

@@ -12,7 +12,7 @@ import org.bukkit.inventory.meta.Damageable
 import org.bukkit.scheduler.BukkitRunnable
 
 class Mush(b: Block) {
-    private val MAX_AMOUNT = 1000
+    private val maxAmount = 1000
 
     /** 木であるかどうかを返す
      *
@@ -62,7 +62,7 @@ class Mush(b: Block) {
      * @return 検査の最大値を超えたかどうか (超えたらfalse)
      */
     private fun searchAround(center: Location): Boolean {
-        if (mushLog.size > MAX_AMOUNT) return false
+        if (mushLog.size > maxAmount) return false
         val l = center.clone()
         var b: Block
 
@@ -83,7 +83,7 @@ class Mush(b: Block) {
                 }
             }
         }
-        return mushLog.size <= MAX_AMOUNT
+        return mushLog.size <= maxAmount
     }
 
     /** 木を切る

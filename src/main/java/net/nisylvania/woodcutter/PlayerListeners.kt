@@ -15,7 +15,7 @@ class PlayerListeners(main: Woodcutter) : Listener {
     }
 
     @EventHandler
-    fun BrockBreakEvent(e: BlockBreakEvent) {
+    fun brockBreakEvent(e: BlockBreakEvent) {
         //サバイバルとアドベンチャー以外除外
 
         if (e.player.gameMode != GameMode.SURVIVAL && e.player.gameMode != GameMode.ADVENTURE) return

@@ -12,11 +12,10 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.scheduler.BukkitRunnable
 import java.util.*
-import kotlin.collections.ArrayList
 
 class Tree(b: Block) {
-    private val MAX_LOG_AMOUNT = 1000
-    private val MAX_LEAVES_AMOUNT = 2000
+    private val maxLogAmount = 2000
+    private val maxLeavesAmount = 4000
 
     /** 木であるかどうかを返す
      *
@@ -316,7 +315,7 @@ class Tree(b: Block) {
      * @return 木の大きさが限度を超えているか(超えていればtrue)
      */
     private fun tooBig(): Boolean {
-        return treeLog.size > MAX_LOG_AMOUNT || treeLeaves.size > MAX_LEAVES_AMOUNT
+        return treeLog.size > maxLogAmount || treeLeaves.size > maxLeavesAmount
     }
 
     /** プレイヤーの手に持っているツールの耐久値を減らす

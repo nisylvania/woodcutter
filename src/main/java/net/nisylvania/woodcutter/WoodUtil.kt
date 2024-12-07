@@ -15,6 +15,7 @@ object WoodUtil {
      * マングローブの原木 -> 8
      * マングローブの根 -> 9
      * 桜 -> 10
+     * ペールオーク -> 11
      */
     private val logs: List<Material> = listOf(
         Material.OAK_LOG,  //0
@@ -27,7 +28,8 @@ object WoodUtil {
         Material.WARPED_STEM,
         Material.MANGROVE_LOG,
         Material.MANGROVE_ROOTS,  //9
-        Material.CHERRY_LOG
+        Material.CHERRY_LOG,
+        Material.PALE_OAK_LOG
     )
 
     private val leaves: List<Material> = listOf(
@@ -41,7 +43,8 @@ object WoodUtil {
         Material.WARPED_WART_BLOCK,
         Material.MANGROVE_LEAVES,
         Material.MANGROVE_LEAVES,  //9
-        Material.CHERRY_LEAVES
+        Material.CHERRY_LEAVES,
+        Material.PALE_OAK_LEAVES
     )
 
     private val saplings: List<Material> = listOf(
@@ -55,7 +58,8 @@ object WoodUtil {
         Material.WARPED_FUNGUS,
         Material.MANGROVE_PROPAGULE,
         Material.MANGROVE_PROPAGULE,  //9
-        Material.CHERRY_SAPLING
+        Material.CHERRY_SAPLING,
+        Material.PALE_OAK_SAPLING
     )
 
     /** Materialが原木かどうかを返す
