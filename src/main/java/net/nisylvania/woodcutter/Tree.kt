@@ -214,6 +214,8 @@ class Tree(b: Block) {
                         searchAroundNether(l, false, diameter)
                     } else if (b.type == leaveType && !treeLeaves.contains(b)) {
                         treeLeaves.add(b)
+                    } else if (b.type == Material.SHROOMLIGHT && !treeLeaves.contains(b)) {
+                        treeLeaves.add(b)
                     }
                     if (tooBig()) return false
                 }
